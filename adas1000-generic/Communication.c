@@ -78,7 +78,7 @@ int SpiOpenPort (int spi_device)
     //SPI_MODE_1 (0,1) 	CPOL = 0, CPHA = 1, Clock idle low, data is clocked in on falling edge, output data (change) on rising edge
     //SPI_MODE_2 (1,0) 	CPOL = 1, CPHA = 0, Clock idle high, data is clocked in on falling edge, output data (change) on rising edge
     //SPI_MODE_3 (1,1) 	CPOL = 1, CPHA = 1, Clock idle high, data is clocked in on rising, edge output data (change) on falling edge
-    spi_mode = SPI_MODE_0;
+    spi_mode = SPI_MODE_3;
 
     //----- SET BITS PER WORD -----
     spi_bitsPerWord = 8;
@@ -244,8 +244,12 @@ unsigned char SPI_Init(unsigned char lsbFirst,
                        unsigned char clockPol,
                        unsigned char clockPha)
 {
-    SpiOpenPort(1);
-    return 1;
+    int result = SpiOpenPort(1);
+    if (result == 0) {
+	return 1;
+    } else {
+    	return 0;
+    }
 }
 
 /***************************************************************************//**
@@ -259,8 +263,7 @@ unsigned char SPI_Init(unsigned char lsbFirst,
 unsigned char SPI_Write(unsigned char* data,
 						unsigned char bytesNumber)
 {
-	// Add your code here.
-
+	SpiWriteAndRead(1, data, bytesNumber);
 	return bytesNumber;
 }
 
@@ -275,7 +278,6 @@ unsigned char SPI_Write(unsigned char* data,
 unsigned char SPI_Read(unsigned char* data,
 					   unsigned char bytesNumber)
 {
-	// Add your code here.
-
+	SpiWriteAndRead(1, data, bytesNumber);
 	return bytesNumber;
 }
